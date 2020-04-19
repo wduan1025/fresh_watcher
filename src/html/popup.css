@@ -1,0 +1,34 @@
+button {
+    height: 20%;
+    width: 100%;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5%;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  /* .websiteTitle {
+      height: 20%;
+      width: 100%;
+      background-color: red;
+      onclick="titleClicked";
+  } */
+  
+  .instruction {
+    height: 20%;
+      background-color: blue;
+  }
+  
+  .block {
+    padding: 3%;
+      width: 100%;
+  }
+  
+  p {
+    text-align: center;
+  }
+  
