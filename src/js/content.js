@@ -9,8 +9,15 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     }
 });
 
+
+function sleep(ms) {
+    console.log("Sleeping");
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // Utils
-function clickOnPage() {
+async function clickOnPage() {
+    await sleep(2000);
     var checkoutPageText = "Checkout Amazon Fresh Cart";
     var continuePageText = "Before you checkout";
     var noSlotPageText = "No delivery windows available";
@@ -21,6 +28,8 @@ function clickOnPage() {
         clickAmazonContinue();
     } else if (htmlText.includes(noSlotPageText)) {
         window.history.back();
+    } else {
+        alert("Slot found");
     }
 }
 function clickAmazonCheckout() {
