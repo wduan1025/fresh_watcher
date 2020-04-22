@@ -1,5 +1,5 @@
 'use strict';
-import {amazon, amazonUrlPrefix,amazonCartUrl,amazonFreshCartUrl} from "./utils/resources.js";
+import {amazonCartUrl,amazonFreshCartUrl, amazonFreshCartUrlPrefix} from "./utils/resources.js";
 let invalidBackgroundColor = "#C8C8C8";
 let validBackgroundColor = "#4CAF50";
 var watching = false;
@@ -27,7 +27,7 @@ function updatePageValidInfoWithBackground(){
       // Get current tab url
       let url = tabs[0].url;
       console.log("current tab id is ", currentTabId);
-      var isPageValid = (url === amazonCartUrl || url === amazonFreshCartUrl);
+      var isPageValid = isInCart(url);
       console.log("Page valid: ", isPageValid);
       setPageValidAppearance(isPageValid);
       console.log("Current page tab is ", tabs[0].id);
@@ -137,7 +137,11 @@ function hideElement(elem) {
   elem.style.display='none';
 }
 
-
+function isInCart(url){
+  return url === amazonCartUrl || 
+    url === amazonFreshCartUrl ||
+    url.startsWith(amazonFreshCartUrlPrefix);
+}
 // .HoverClass1:hover {color: blue !important; background-color: green !important;}
 // .HoverClass2:hover {color: red !important; background-color: yellow !important;}
 // JavaScript:

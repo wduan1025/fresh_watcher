@@ -22,6 +22,7 @@ async function clickOnPage() {
     var checkoutPageText = "Checkout Amazon Fresh Cart";
     var continuePageText = "Before you checkout";
     var noSlotPageText = "No delivery windows available";
+    var scheduleDeliveryText = "Schedule your order";
     var htmlText = document.documentElement.innerHTML;
     if (htmlText.includes(checkoutPageText)) {
         clickAmazonCheckout();
@@ -29,8 +30,16 @@ async function clickOnPage() {
         clickAmazonContinue();
     } else if (htmlText.includes(noSlotPageText)) {
         window.history.back();
-    } else if (false){
-        //TODO(weiduan): check if slot found
+    } else if (htmlText.includes(scheduleDeliveryText)){
+        // Since "No delivery window" text is not matched, this page 
+        // Should definitely be a page where slot is available
+        var stopMessage = {
+            type : "action",
+            data : "stop success"
+          }
+          chrome.runtime.sendMessage(stopMessage, function(response) {
+            console.log(`Response from background: ${JSON.stringify(response)}`);
+        });
     } else {
         var stopMessage = {
             type : "action",

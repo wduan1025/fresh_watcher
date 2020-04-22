@@ -82,7 +82,7 @@ chrome.runtime.onMessage.addListener(
             type: "basic",
             title: "Hurry up!",
             message: "Slot found",
-            iconUrl: "/images/get_started16.png",
+            iconUrl: "/icons/carrot-icon32.png",
           };
           chrome.notifications.create("0", opt, function(){});
         } else if (message.data === "stop error") {
@@ -92,6 +92,15 @@ chrome.runtime.onMessage.addListener(
             message: "Please login, go back to cart page, and click start",
             iconUrl: "/images/get_started16.png",
           };
+          chrome.notifications.create("0", opt, function(){});
+        } else if (message.data === "stop success") {
+          var opt = {
+            type: "basic",
+            title: "Hurry!",
+            message: "Delivery window found",
+            iconUrl: "/images/get_started16.png",
+          };
+          watching = false;
           chrome.notifications.create("0", opt, function(){});
         }
       } else if (message.type === "query") {
