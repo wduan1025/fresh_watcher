@@ -1,9 +1,7 @@
 'use strict';
-import {amazon, amazonUrlPrefix,amazonCartUrl} from "./utils/resources.js";
-let invalidOriginalColor = "#C8C8C8";
-let validOriginalColor = "#4CAF50";
-let invalidHoverColor = undefined;
-let validHoverColor = undefined;
+import {amazon, amazonUrlPrefix,amazonCartUrl,amazonFreshCartUrl} from "./utils/resources.js";
+let invalidBackgroundColor = "#C8C8C8";
+let validBackgroundColor = "#4CAF50";
 var watching = false;
 // Init
 let startWatcher = document.getElementById('startWatcher');
@@ -13,10 +11,13 @@ var currentTabId = -1;
 function updatePageValidInfoWithBackground(){
   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
     console.log(tabs);
+    if (tabs.length === 0) {
+      alert("Please refresh current tab");
+    }
     // Get current tab url
     let url = tabs[0].url;
     console.log("current tab id is ", currentTabId);
-    var isPageValid = url === amazonCartUrl;
+    var isPageValid = (url === amazonCartUrl || url === amazonFreshCartUrl);
     console.log("Page valid: ", isPageValid);
     setPageValidAppearance(isPageValid);
     console.log("Current page tab is ", tabs[0].id);
@@ -56,13 +57,13 @@ function setPageValidAppearance(pageValid){
   var element = document.getElementById("startWatcher");
   if (pageValid){
     // Set button green
-    element.style.backgroundColor = validOriginalColor;
+    element.style.borderColor = validBackgroundColor;
     // Reset onclick
     startWatcher.onclick = onStartClickedOnValidPage;
     
   } else {
     // Set button gray
-    element.style.borderColor = invalidOriginalColor;
+    element.style.borderColor = invalidBackgroundColor;
     // reset onclick
     startWatcher.onclick = onStartClickedOnInvalidPage;
   }
@@ -86,14 +87,6 @@ function onStartClickedOnValidPage() {
 function onStartClickedOnInvalidPage() {
   console.log("Clicked on invalid page");
   alert("Please go to your cart page");
-}
-
-function getCurrentWebsite(url) {
-  var website = undefined;
-  if (url.startsWith(amazonUrlPrefix)) {
-    website = amazon;
-  }
-  return website;
 }
 
 var websiteTitleElements = document.getElementsByClassName("websiteTitle");
