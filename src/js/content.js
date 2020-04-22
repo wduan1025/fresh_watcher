@@ -17,7 +17,8 @@ function sleep(ms) {
 
 // Utils
 async function clickOnPage() {
-    await sleep(2000);
+    var sleepTime = 2000 * (1 + Math.random());
+    await sleep(sleepTime);
     var checkoutPageText = "Checkout Amazon Fresh Cart";
     var continuePageText = "Before you checkout";
     var noSlotPageText = "No delivery windows available";

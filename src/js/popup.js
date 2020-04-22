@@ -1,7 +1,9 @@
 'use strict';
 import {amazon, amazonUrlPrefix,amazonCartUrl} from "./utils/resources.js";
-let invalidColor = "#696969";
-let validColor = "#4CAF50";
+let invalidOriginalColor = "#C8C8C8";
+let validOriginalColor = "#4CAF50";
+let invalidHoverColor = undefined;
+let validHoverColor = undefined;
 var watching = false;
 // Init
 let startWatcher = document.getElementById('startWatcher');
@@ -54,12 +56,13 @@ function setPageValidAppearance(pageValid){
   var element = document.getElementById("startWatcher");
   if (pageValid){
     // Set button green
-    element.style.backgroundColor = validColor;
+    element.style.backgroundColor = validOriginalColor;
     // Reset onclick
     startWatcher.onclick = onStartClickedOnValidPage;
+    
   } else {
     // Set button gray
-    element.style.backgroundColor = invalidColor;
+    element.style.borderColor = invalidOriginalColor;
     // reset onclick
     startWatcher.onclick = onStartClickedOnInvalidPage;
   }
@@ -120,3 +123,14 @@ function showElement(elem) {
 function hideElement(elem) {
   elem.style.display='none';
 }
+
+
+// .HoverClass1:hover {color: blue !important; background-color: green !important;}
+// .HoverClass2:hover {color: red !important; background-color: yellow !important;}
+// JavaScript:
+
+// var Button=document.getElementById('Button');
+// /* Clear all previous hover classes */
+// Button.classList.remove('HoverClass1','HoverClass2');
+// /* Set the desired hover class */
+// Button.classList.add('HoverClass1');
