@@ -9,30 +9,41 @@ updatePageValidInfoWithBackground();
 var currentTabId = -1;
 // Get current page url
 function updatePageValidInfoWithBackground(){
-  chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-    console.log(tabs);
-    if (tabs.length === 0) {
-      alert("Please refresh current tab");
+  // Send message to background js to get watching status
+  var queryMessage = {
+    type : "query"
+  }
+  console.log("Message from popup to background: ", queryMessage);
+  chrome.runtime.sendMessage(queryMessage, function(queryResponse) {
+    console.log(`Response from background: ${JSON.stringify(queryResponse)}`);
+    if (queryResponse.watching) {
+      return;
     }
-    // Get current tab url
-    let url = tabs[0].url;
-    console.log("current tab id is ", currentTabId);
-    var isPageValid = (url === amazonCartUrl || url === amazonFreshCartUrl);
-    console.log("Page valid: ", isPageValid);
-    setPageValidAppearance(isPageValid);
-    console.log("Current page tab is ", tabs[0].id);
-    // If current page is valid, send message to background js
-    // to record this tab
-    var backgroundMessage = {
-      type : "page validity",
-      isPageValid : isPageValid,
-      tabId : tabs[0].id,
-      watching: watching
-    };
-    console.log("Message from popup to background ", backgroundMessage);
-    chrome.runtime.sendMessage(backgroundMessage, function(response) {
-      console.log(`Response from background: ${JSON.stringify(response)}`);
-      currentTabId = response.tabId;
+    chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+      console.log(tabs);
+      if (tabs.length === 0) {
+        alert("Please refresh current tab");
+      }
+      // Get current tab url
+      let url = tabs[0].url;
+      console.log("current tab id is ", currentTabId);
+      var isPageValid = (url === amazonCartUrl || url === amazonFreshCartUrl);
+      console.log("Page valid: ", isPageValid);
+      setPageValidAppearance(isPageValid);
+      console.log("Current page tab is ", tabs[0].id);
+      // If current page is valid, send message to background js
+      // to record this tab
+      var backgroundMessage = {
+        type : "page validity",
+        isPageValid : isPageValid,
+        tabId : tabs[0].id,
+        watching: watching
+      };
+      console.log("Message from popup to background ", backgroundMessage);
+      chrome.runtime.sendMessage(backgroundMessage, function(response) {
+        console.log(`Response from background: ${JSON.stringify(response)}`);
+        currentTabId = response.tabId;
+      });
     });
   });
 }
@@ -60,13 +71,22 @@ function setPageValidAppearance(pageValid){
     element.style.borderColor = validBackgroundColor;
     // Reset onclick
     startWatcher.onclick = onStartClickedOnValidPage;
-    
   } else {
     // Set button gray
     element.style.borderColor = invalidBackgroundColor;
     // reset onclick
     startWatcher.onclick = onStartClickedOnInvalidPage;
   }
+}
+function onStopClicked() {
+  console.log("Stop clicked");
+  var stopMessage = {
+    type : "action",
+    data : "stop error"
+  };
+  chrome.runtime.sendMessage(stopMessage, function(response) {
+    console.log(`Response from background: ${JSON.stringify(response)}`);
+  });
 }
 function onStartClickedOnValidPage() {
   console.log("Start watching!");

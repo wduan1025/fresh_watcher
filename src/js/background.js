@@ -94,6 +94,8 @@ chrome.runtime.onMessage.addListener(
           };
           chrome.notifications.create("0", opt, function(){});
         }
+      } else if (message.type === "query") {
+        sendResponse({watching : watching});
       }
   }
 );
