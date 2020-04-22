@@ -79,6 +79,25 @@ chrome.runtime.onMessage.addListener(
         }
       } else if (message.type === "page action") {
         sendResponse({type: "ack"});
+      } else if (message.type === "action") {
+        if (message.data === "stop slot") {
+          console.log("Stopping...");
+          var opt = {
+            type: "basic",
+            title: "Hurry up!",
+            message: "Slot found",
+            iconUrl: "/images/get_started16.png",
+          };
+          chrome.notifications.create("0", opt, function(){});
+        } else if (message.data === "stop error") {
+          var opt = {
+            type: "basic",
+            title: "Ooops, we are caught",
+            message: "Please login, go back to cart page, and click start",
+            iconUrl: "/images/get_started16.png",
+          };
+          chrome.notifications.create("0", opt, function(){});
+        }
       }
   }
 );

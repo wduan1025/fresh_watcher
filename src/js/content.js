@@ -1,4 +1,4 @@
-console.log("hey")
+console.log("hey");
 // Listers
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     console.log(message);
@@ -29,8 +29,16 @@ async function clickOnPage() {
         clickAmazonContinue();
     } else if (htmlText.includes(noSlotPageText)) {
         window.history.back();
+    } else if (false){
+        //TODO(weiduan): check if slot found
     } else {
-        alert("Slot found");
+        var stopMessage = {
+            type : "action",
+            data : "stop error"
+          }
+          chrome.runtime.sendMessage(stopMessage, function(response) {
+            console.log(`Response from background: ${JSON.stringify(response)}`);
+        });
     }
 }
 function clickAmazonCheckout() {

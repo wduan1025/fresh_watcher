@@ -2,7 +2,7 @@
   "name": "Fresh Watcher",
   "version": "1.0",
   "description": "Now my watch begins for your Amazon Fresh delivery",
-  "permissions": ["activeTab", "storage", "tabs"],
+  "permissions": ["activeTab", "storage", "tabs", "notifications"],
   "background": {
     "page": "src/html/background.html",
     "persistent": false
