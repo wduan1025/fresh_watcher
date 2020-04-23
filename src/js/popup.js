@@ -24,7 +24,8 @@ function updatePageValidInfoWithBackground(){
     chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
       console.log(tabs);
       if (tabs.length === 0) {
-        alert("Please refresh cart page");
+        alert("Please refresh cart page and restart Fresh Watcher");
+        exit();
       }
       // Get current tab url
       let url = tabs[0].url;

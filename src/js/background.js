@@ -80,6 +80,7 @@ chrome.runtime.onMessage.addListener(
       } else if (message.type === "action") {
         if (message.data === "stop slot") {
           console.log("Stopping...");
+          numClicks = 0;
           var opt = {
             type: "basic",
             title: "Hurry up!",
@@ -87,8 +88,10 @@ chrome.runtime.onMessage.addListener(
             iconUrl: "/icons/carrot-icon32.png",
           };
           chrome.notifications.create("", opt, function(){});
+          alert("Slot found!");
         } else if (message.data === "stop error") {
           watching = false;
+          numClicks = 0;
           var opt = {
             type: "basic",
             title: "Ooops, we are caught",
@@ -96,8 +99,11 @@ chrome.runtime.onMessage.addListener(
             iconUrl: "/icons/carrot-icon32.png",
           };
           chrome.notifications.create("", opt, function(){});
+          alert("Ooooops, we are caught");
         } else if (message.data === "stop success") {
           watching = false;
+          numClicks = 0;
+          console.log("Sending notification");
           var opt = {
             type: "basic",
             title: "Hurry!",
@@ -105,6 +111,8 @@ chrome.runtime.onMessage.addListener(
             iconUrl: "/icons/carrot-icon32.png",
           };
           chrome.notifications.create("", opt, function(){});
+          // alert("Slot found!");
+          console.log("Notification sent");
           var popupUpdateMessage = {
             type : "page update",
             extra : {
@@ -121,6 +129,7 @@ chrome.runtime.onMessage.addListener(
             message: "",
             iconUrl: "/icons/carrot-icon32.png",
           };
+          alert("Stopped by user");
           chrome.notifications.create("", opt, function(){});
         }
       } else if (message.type === "query") {

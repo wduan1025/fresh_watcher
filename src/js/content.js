@@ -1,5 +1,5 @@
 console.log("hey");
-var maxNumClicks = 3;
+var maxNumClicks = 100000;
 // Listers
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     console.log("Message received by content js is ", message);
@@ -28,6 +28,8 @@ async function clickOnPage(numClicks) {
     var checkoutPageText = "Checkout Amazon Fresh Cart";
     var continuePageText = "Before you checkout";
     var noSlotPageText = "No delivery windows available";
+    var noSlotPageText1 = "No doorstep delivery windows";
+    var noSlotPageText2 = "No attended delivery windows";
     var scheduleDeliveryText = "Schedule your order";
     var htmlText = document.documentElement.innerHTML;
     if (numClicks > maxNumClicks) {
@@ -45,7 +47,7 @@ async function clickOnPage(numClicks) {
         clickAmazonCheckout();
     } else if (htmlText.includes(continuePageText)) {
         clickAmazonContinue();
-    } else if (htmlText.includes(noSlotPageText)) {
+    } else if (htmlText.includes(noSlotPageText) || htmlText.includes(noSlotPageText1) || htmlText.includes(noSlotPageText2)) {
         window.history.back();
     } else if (htmlText.includes(scheduleDeliveryText)){
         // Since "No delivery window" text is not matched, this page 
