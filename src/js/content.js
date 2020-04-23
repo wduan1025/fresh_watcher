@@ -31,6 +31,7 @@ async function clickOnPage(numClicks) {
     var noSlotPageText1 = "No doorstep delivery windows";
     var noSlotPageText2 = "No attended delivery windows";
     var scheduleDeliveryText = "Schedule your order";
+    var paymentText = "Use this payment method";
     var htmlText = document.documentElement.innerHTML;
     if (numClicks > maxNumClicks) {
         console.log("Mocking slot found message");
@@ -49,9 +50,10 @@ async function clickOnPage(numClicks) {
         clickAmazonContinue();
     } else if (htmlText.includes(noSlotPageText) || htmlText.includes(noSlotPageText1) || htmlText.includes(noSlotPageText2)) {
         window.history.back();
-    } else if (htmlText.includes(scheduleDeliveryText)){
+    } else if (htmlText.includes(scheduleDeliveryText) || htmlText.includes(paymentText)){
         // Since "No delivery window" text is not matched, this page 
         // Should definitely be a page where slot is available
+        // Or if you are asked to select payment method, should have slot
         var stopMessage = {
             type : "action",
             data : "stop success"
