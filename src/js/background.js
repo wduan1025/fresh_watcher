@@ -88,6 +88,7 @@ chrome.runtime.onMessage.addListener(
           };
           chrome.notifications.create("", opt, function(){});
         } else if (message.data === "stop error") {
+          watching = false;
           var opt = {
             type: "basic",
             title: "Ooops, we are caught",
@@ -96,16 +97,31 @@ chrome.runtime.onMessage.addListener(
           };
           chrome.notifications.create("", opt, function(){});
         } else if (message.data === "stop success") {
-          console.log("Showing notification");
+          watching = false;
           var opt = {
             type: "basic",
             title: "Hurry!",
             message: "Delivery window found",
             iconUrl: "/icons/carrot-icon32.png",
           };
-          watching = false;
           chrome.notifications.create("", opt, function(){});
-          console.log("Notification showed");
+          var popupUpdateMessage = {
+            type : "page update",
+            extra : {
+              watching : watching
+            }
+          };
+          console.log("Message from background to popup: ", popupUpdateMessage);
+          chrome.runtime.sendMessage(popupUpdateMessage);
+        } else if (message.data === "stop manual") {
+          watching =false;
+          var opt = {
+            type: "basic",
+            title: "Fresh Watcher stopped by user",
+            message: "",
+            iconUrl: "/icons/carrot-icon32.png",
+          };
+          chrome.notifications.create("", opt, function(){});
         }
       } else if (message.type === "query") {
         sendResponse({watching : watching});

@@ -1,11 +1,12 @@
 'use strict';
 import {amazonCartUrl,amazonFreshCartUrl, amazonFreshCartUrlPrefix} from "./utils/resources.js";
-let invalidBackgroundColor = "#C8C8C8";
-let validBackgroundColor = "#4CAF50";
+let invalidColor = "#C8C8C8";
+let startBorderColor = "#4CAF50";
 let stopBorderColor = "red";
 var watching = false;
 // Init
 let startWatcher = document.getElementById('startWatcher');
+let stopWatcher = document.getElementById('stopWatcher');
 updatePageValidInfoWithBackground();
 var currentTabId = -1;
 // Get current page url
@@ -30,7 +31,6 @@ function updatePageValidInfoWithBackground(){
       console.log("current tab id is ", currentTabId);
       var isPageValid = isInCart(url);
       console.log("Page valid: ", isPageValid);
-      setPageValidAppearance(isPageValid);
       console.log("Current page tab is ", tabs[0].id);
       // If current page is valid, send message to background js
       // to record this tab
@@ -43,9 +43,10 @@ function updatePageValidInfoWithBackground(){
       console.log("Message from popup to background ", backgroundMessage);
       chrome.runtime.sendMessage(backgroundMessage, function(response) {
         console.log(`Response from background: ${JSON.stringify(response)}`);
-        if (response === undefined) {
-          return;
-        }
+        // if (response === undefined) {
+        //   return;
+        // }
+        setPageValidAppearance(isPageValid);
         currentTabId = response.tabId;
       });
     });
@@ -60,6 +61,10 @@ chrome.runtime.onMessage.addListener(
     if (message.type === "page update") {
       // Maybe tell background that I'm watching
       console.log("Updating popup...");
+      if ('extra' in message) {
+        console.log("Maybe stop watching in popup");
+        watching = message.watching;
+      }
       updatePageValidInfoWithBackground();
     }
   }
@@ -67,25 +72,36 @@ chrome.runtime.onMessage.addListener(
 
 // Util function
 function setPageValidAppearance(pageValid){
+  console.log("Setting popup button appearance");
 // Change popup window appearance according to 
 // page validity information
   if (pageValid){
     // Set button green
-    startWatcher.style.borderColor = validBackgroundColor;
+    startWatcher.style.borderColor = startBorderColor;
     // Reset onclick
     startWatcher.onclick = onStartClickedOnValidPage;
   } else {
     // Set button gray
-    startWatcher.style.borderColor = invalidBackgroundColor;
+    startWatcher.style.borderColor = invalidColor;
     // reset onclick
     startWatcher.onclick = onStartClickedOnInvalidPage;
   }
+  if (!watching) {
+    stopWatcher.style.borderColor = invalidColor;
+    stopWatcher.onclick = onInvalidStopClicked;
+  }
 }
-function onStopClicked() {
+function onInvalidStopClicked(){
+  alert("Fresh Watcher is not running");
+}
+function onValidStopClicked() {
   console.log("Stop clicked");
+  watching = false;
+  stopWatcher.style.borderColor = invalidColor;
+  stopWatcher.onclick = onInvalidStopClicked;
   var stopMessage = {
     type : "action",
-    data : "stop error"
+    data : "stop manual"
   };
   chrome.runtime.sendMessage(stopMessage, function(response) {
     console.log(`Response from background: ${JSON.stringify(response)}`);
@@ -94,6 +110,9 @@ function onStopClicked() {
 function onStartClickedOnValidPage() {
   console.log("Start watching!");
   watching = true;
+  // Change stopWatcher style
+  stopWatcher.style.borderColor = stopBorderColor;
+  stopWatcher.onclick = onValidStopClicked;
   // Send message to backgrond js to update tab id
   updatePageValidInfoWithBackground();
   console.log("In onClick, currentTabId is ", currentTabId);
