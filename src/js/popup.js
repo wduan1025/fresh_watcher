@@ -19,7 +19,7 @@ function updatePageValidInfoWithBackground(){
   chrome.runtime.sendMessage(queryMessage, function(queryResponse) {
     console.log(`Response from background: ${JSON.stringify(queryResponse)}`);
     if (queryResponse.watching) {
-      return;
+      watching = queryResponse.watching;
     }
     chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
       console.log(tabs);
@@ -90,6 +90,9 @@ function setPageValidAppearance(pageValid){
   if (!watching) {
     stopWatcher.style.borderColor = invalidColor;
     stopWatcher.onclick = onInvalidStopClicked;
+  } else {
+    stopWatcher.style.borderColor = stopBorderColor;
+    stopWatcher.onclick = onValidStopClicked;
   }
 }
 function onInvalidStopClicked(){
