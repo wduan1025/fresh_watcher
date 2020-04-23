@@ -1,6 +1,5 @@
-import {amazon, amazonUrlPrefix} from "./utils/resources.js";
-console.log(amazon);
 'use strict';
+var numClicks = 0;
 var watchingTabId = -1;
 var watching = false;
 console.log("watching on tab: ", watchingTabId);
@@ -38,9 +37,12 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   if (tabId === watchingTabId){
     if (changeInfo.status == 'complete') {  
       if (watching) {
+        numClicks += 1;
+        console.log("Clicked for ", numClicks, " times so far");
         var clickMessage = {
           type : "action",
-          data : "click"
+          data : "click",
+          times : numClicks
         }
         console.log("Message from background to content: ", clickMessage);
         chrome.tabs.sendMessage(tabId, clickMessage, function(response) {
@@ -84,24 +86,26 @@ chrome.runtime.onMessage.addListener(
             message: "Slot found",
             iconUrl: "/icons/carrot-icon32.png",
           };
-          chrome.notifications.create("0", opt, function(){});
+          chrome.notifications.create("", opt, function(){});
         } else if (message.data === "stop error") {
           var opt = {
             type: "basic",
             title: "Ooops, we are caught",
             message: "Please login, go back to cart page, and click start",
-            iconUrl: "/images/get_started16.png",
+            iconUrl: "/icons/carrot-icon32.png",
           };
-          chrome.notifications.create("0", opt, function(){});
+          chrome.notifications.create("", opt, function(){});
         } else if (message.data === "stop success") {
+          console.log("Showing notification");
           var opt = {
             type: "basic",
             title: "Hurry!",
             message: "Delivery window found",
-            iconUrl: "/images/get_started16.png",
+            iconUrl: "/icons/carrot-icon32.png",
           };
           watching = false;
-          chrome.notifications.create("0", opt, function(){});
+          chrome.notifications.create("", opt, function(){});
+          console.log("Notification showed");
         }
       } else if (message.type === "query") {
         sendResponse({watching : watching});

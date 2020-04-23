@@ -22,7 +22,7 @@ function updatePageValidInfoWithBackground(){
     chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
       console.log(tabs);
       if (tabs.length === 0) {
-        alert("Please refresh current tab");
+        alert("Please refresh cart page");
       }
       // Get current tab url
       let url = tabs[0].url;
@@ -42,6 +42,9 @@ function updatePageValidInfoWithBackground(){
       console.log("Message from popup to background ", backgroundMessage);
       chrome.runtime.sendMessage(backgroundMessage, function(response) {
         console.log(`Response from background: ${JSON.stringify(response)}`);
+        if (response === undefined) {
+          return;
+        }
         currentTabId = response.tabId;
       });
     });
