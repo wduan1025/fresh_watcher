@@ -7,6 +7,8 @@ var watching = false;
 // Init
 let startWatcher = document.getElementById('startWatcher');
 let stopWatcher = document.getElementById('stopWatcher');
+let feedback = document.getElementById('feedback');
+feedback.onclick = onFeedbackClicked;
 updatePageValidInfoWithBackground();
 var currentTabId = -1;
 // Get current page url
@@ -71,7 +73,13 @@ chrome.runtime.onMessage.addListener(
   }
 );
 
+
 // Util function
+function onFeedbackClicked() {
+  // var newURL = "http://stackoverflow.com/";
+  var newURL = "mailto:FreshWatcher@gmail.com?subject=Feedback";
+  chrome.tabs.create({ url: newURL });
+}
 function setPageValidAppearance(pageValid){
   console.log("Setting popup button appearance");
 // Change popup window appearance according to 
@@ -84,11 +92,13 @@ function setPageValidAppearance(pageValid){
   } else {
     // Set button gray
     startWatcher.style.borderColor = invalidColor;
+    startWatcher.style.color = invalidColor;
     // reset onclick
     startWatcher.onclick = onStartClickedOnInvalidPage;
   }
   if (!watching) {
     stopWatcher.style.borderColor = invalidColor;
+    stopWatcher.style.color = invalidColor;
     stopWatcher.onclick = onInvalidStopClicked;
   } else {
     stopWatcher.style.borderColor = stopBorderColor;
@@ -102,6 +112,7 @@ function onValidStopClicked() {
   console.log("Stop clicked");
   watching = false;
   stopWatcher.style.borderColor = invalidColor;
+  stopWatcher.style.color = invalidColor;
   stopWatcher.onclick = onInvalidStopClicked;
   var stopMessage = {
     type : "action",
@@ -116,6 +127,7 @@ function onStartClickedOnValidPage() {
   watching = true;
   // Change stopWatcher style
   stopWatcher.style.borderColor = stopBorderColor;
+  stopWatcher.style.color = invalidColor;
   stopWatcher.onclick = onValidStopClicked;
   // Send message to backgrond js to update tab id
   updatePageValidInfoWithBackground();
