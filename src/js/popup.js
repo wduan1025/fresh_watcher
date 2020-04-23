@@ -2,6 +2,7 @@
 import {amazonCartUrl,amazonFreshCartUrl, amazonFreshCartUrlPrefix} from "./utils/resources.js";
 let invalidBackgroundColor = "#C8C8C8";
 let validBackgroundColor = "#4CAF50";
+let stopBorderColor = "red";
 var watching = false;
 // Init
 let startWatcher = document.getElementById('startWatcher');
@@ -68,15 +69,14 @@ chrome.runtime.onMessage.addListener(
 function setPageValidAppearance(pageValid){
 // Change popup window appearance according to 
 // page validity information
-  var element = document.getElementById("startWatcher");
   if (pageValid){
     // Set button green
-    element.style.borderColor = validBackgroundColor;
+    startWatcher.style.borderColor = validBackgroundColor;
     // Reset onclick
     startWatcher.onclick = onStartClickedOnValidPage;
   } else {
     // Set button gray
-    element.style.borderColor = invalidBackgroundColor;
+    startWatcher.style.borderColor = invalidBackgroundColor;
     // reset onclick
     startWatcher.onclick = onStartClickedOnInvalidPage;
   }

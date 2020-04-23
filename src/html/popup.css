@@ -53,15 +53,24 @@ div{
 .button1 {
   background-color: white; 
   color: black; 
+  border: 2px solid #ff0000;
+  width: 40%;
+  margin-left: 30%;
+  margin-right: 30%;
+}
+
+.button2 {
+  background-color: white; 
+  color: black; 
   border: 2px solid #4CAF50;
   width: 40%;
   margin-left: 30%;
   margin-right: 30%
 }
-.button:hover {
+/* .button:hover {
   background-color: #4CAF50;
   color: white;
-}
+} */
 
 ul {
   list-style-type: none;
