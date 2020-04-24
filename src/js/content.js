@@ -23,7 +23,7 @@ function sleep(ms) {
 
 // Utils
 async function clickOnPage(numClicks) {
-    var sleepTime = 500 * (1 + Math.random());
+    var sleepTime = 2000 * (1 + Math.random());
     await sleep(sleepTime);
     var checkoutPageText = "Checkout Amazon Fresh Cart";
     var continuePageText = "Before you checkout";
