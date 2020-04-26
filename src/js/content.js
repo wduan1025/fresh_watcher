@@ -1,5 +1,5 @@
 console.log("hey");
-var maxNumClicks = 5;
+var maxNumClicks = 100000;
 // Listers
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     console.log("Message received by content js is ", message);
