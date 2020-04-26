@@ -1,5 +1,5 @@
 console.log("hey");
-var maxNumClicks = 100000;
+var maxNumClicks = 5;
 // Listers
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     console.log("Message received by content js is ", message);
@@ -26,12 +26,14 @@ async function clickOnPage(numClicks) {
     var sleepTime = 2000 * (1 + Math.random());
     await sleep(sleepTime);
     var checkoutPageText = "Checkout Amazon Fresh Cart";
+    var checkoutPageText1 = "Proceed to checkout";
     var continuePageText = "Before you checkout";
     var noSlotPageText = "No delivery windows available";
     var noSlotPageText1 = "No doorstep delivery windows";
     var noSlotPageText2 = "No attended delivery windows";
     var scheduleDeliveryText = "Schedule your order";
-    var paymentText = "Use this payment method";
+    var placeOrderText = "Place your order";
+    var paymentText = "Select a payment method";
     var htmlText = document.documentElement.innerHTML;
     if (numClicks > maxNumClicks) {
         console.log("Mocking slot found message");
@@ -39,18 +41,19 @@ async function clickOnPage(numClicks) {
             type : "action",
             data : "stop success"
           }
+          alert("Delivery window found!");
           chrome.runtime.sendMessage(stopMessage, function(response) {
             console.log(`Response from background: ${JSON.stringify(response)}`);
         });
         return;
     }
-    if (htmlText.includes(checkoutPageText)) {
+    if (htmlText.includes(checkoutPageText) || htmlText.includes(checkoutPageText1)) {
         clickAmazonCheckout();
     } else if (htmlText.includes(continuePageText)) {
         clickAmazonContinue();
     } else if (htmlText.includes(noSlotPageText) || htmlText.includes(noSlotPageText1) || htmlText.includes(noSlotPageText2)) {
         window.history.back();
-    } else if (htmlText.includes(scheduleDeliveryText) || htmlText.includes(paymentText)){
+    } else if (htmlText.includes(scheduleDeliveryText) || htmlText.includes(paymentText) || htmlText.includes(placeOrderText)){
         // Since "No delivery window" text is not matched, this page 
         // Should definitely be a page where slot is available
         // Or if you are asked to select payment method, should have slot
@@ -62,6 +65,7 @@ async function clickOnPage(numClicks) {
             console.log(`Response from background: ${JSON.stringify(response)}`);
         });
     } else {
+        console.log("Nothing found on this page");
         var stopMessage = {
             type : "action",
             data : "stop error"
