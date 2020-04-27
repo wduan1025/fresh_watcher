@@ -33,6 +33,7 @@ async function clickOnPage(numClicks) {
     var noSlotPageText2 = "No attended delivery windows";
     var scheduleDeliveryText = "Schedule your order";
     var placeOrderText = "Place your order";
+    var availabilityText = "Limited availability";
     var paymentText = "Select a payment method";
     var htmlText = document.documentElement.innerHTML;
     if (numClicks > maxNumClicks) {
@@ -48,15 +49,16 @@ async function clickOnPage(numClicks) {
         return;
     }
     if (htmlText.includes(checkoutPageText) || htmlText.includes(checkoutPageText1)) {
+        console.log("checking out");
         clickAmazonCheckout();
     } else if (htmlText.includes(continuePageText)) {
+        console.log("Continuing");
         clickAmazonContinue();
-    } else if (htmlText.includes(noSlotPageText) || htmlText.includes(noSlotPageText1) || htmlText.includes(noSlotPageText2)) {
-        window.history.back();
-    } else if (htmlText.includes(scheduleDeliveryText) || htmlText.includes(paymentText) || htmlText.includes(placeOrderText)){
+    } else if (htmlText.includes(scheduleDeliveryText) || htmlText.includes(paymentText) || htmlText.includes(placeOrderText) || htmlText.includes(availabilityText)){
         // Since "No delivery window" text is not matched, this page 
         // Should definitely be a page where slot is available
         // Or if you are asked to select payment method, should have slot
+        console.log("slot found");
         var stopMessage = {
             type : "action",
             data : "stop success"
@@ -64,6 +66,14 @@ async function clickOnPage(numClicks) {
           chrome.runtime.sendMessage(stopMessage, function(response) {
             console.log(`Response from background: ${JSON.stringify(response)}`);
         });
+    } else if (htmlText.includes(noSlotPageText) || htmlText.includes(noSlotPageText1) || htmlText.includes(noSlotPageText2)) {
+        
+        console.log(htmlText.includes(noSlotPageText));
+        console.log(htmlText.includes(noSlotPageText1));
+        console.log(htmlText.includes(noSlotPageText2));
+        console.log("No slot");
+        await sleep(2000);
+        window.history.back();
     } else {
         console.log("Nothing found on this page");
         var stopMessage = {
