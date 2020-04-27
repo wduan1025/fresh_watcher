@@ -67,7 +67,8 @@ async function clickOnPage(numClicks) {
             console.log(`Response from background: ${JSON.stringify(response)}`);
         });
     } else if (htmlText.includes(noSlotPageText) || htmlText.includes(noSlotPageText1) || htmlText.includes(noSlotPageText2)) {
-        
+        //TODO(weiduan): The first text will always appear even if there is available slot. It works for now by being put under the
+        //logic of slot found, but this wouldn't last for long.
         console.log(htmlText.includes(noSlotPageText));
         console.log(htmlText.includes(noSlotPageText1));
         console.log(htmlText.includes(noSlotPageText2));
