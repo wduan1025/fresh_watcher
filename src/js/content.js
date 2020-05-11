@@ -31,7 +31,6 @@ async function clickOnPage(numClicks) {
     var noSlotPageText = "No delivery windows available";
     var noSlotPageText1 = "No doorstep delivery windows";
     var noSlotPageText2 = "No attended delivery windows";
-    var scheduleDeliveryText = "Schedule your order";
     var placeOrderText = "Place your order";
     var availabilityText = "Limited availability";
     var paymentText = "Select a payment method";
@@ -54,7 +53,7 @@ async function clickOnPage(numClicks) {
     } else if (htmlText.includes(continuePageText)) {
         console.log("Continuing");
         clickAmazonContinue();
-    } else if (htmlText.includes(scheduleDeliveryText) || htmlText.includes(paymentText) || htmlText.includes(placeOrderText) || htmlText.includes(availabilityText)){
+    } else if (htmlText.includes(paymentText) || htmlText.includes(placeOrderText) || htmlText.includes(availabilityText)){
         // Since "No delivery window" text is not matched, this page 
         // Should definitely be a page where slot is available
         // Or if you are asked to select payment method, should have slot
