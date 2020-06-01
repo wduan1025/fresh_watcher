@@ -1,5 +1,5 @@
 # Fresh Watcher
-Cannot find a delivery slot during COVID19 quanrantine? Here's the chrome extension you want.
+Cannot find an Amazon Fresh delivery slot during COVID19 quanrantine? Here's the chrome extension you want.
 
 ## Installation
 1. download this repository as zip
