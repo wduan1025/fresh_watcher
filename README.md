@@ -11,7 +11,7 @@ Cannot find an Amazon Fresh delivery slot during COVID19 quanrantine? Here's the
 ## Usage
 After installation, 
 1. Put all items in to your Amazon Cart, 
-2. Go to the *Amazon cart page*
+2. Go to the **Amazon cart** page
 3. Open Fresh Watcher and click start
 4. You will sometimes receive a notification saying we are caught. Just log in again, and restart Fresh Watcher
 ## FAQ
